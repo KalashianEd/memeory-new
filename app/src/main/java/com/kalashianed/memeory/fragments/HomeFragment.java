@@ -48,6 +48,7 @@ import com.kalashianed.memeory.game.GameManager;
 import com.kalashianed.memeory.model.Meme;
 import com.kalashianed.memeory.utils.CustomAnimationUtils;
 import com.kalashianed.memeory.utils.FragmentStyleHelper;
+import com.kalashianed.memeory.utils.VibrationUtils;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
@@ -234,6 +235,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         
         // Настраиваем обработчик нажатия на кнопку "Начать игру"
         btnStartGame.setOnClickListener(v -> {
+            // Вибрация при нажатии на кнопку начала игры
+            VibrationUtils.vibrateMedium(requireContext());
+            
             // Определяем выбранную сложность
             int selectedId = rgDifficulty.getCheckedRadioButtonId();
             if (selectedId == rbEasy.getId()) {
@@ -749,6 +753,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // Проверяем, что нажатие было на кнопку-вариант
         for (int i = 0; i < optionButtons.length; i++) {
             if (v.getId() == optionButtons[i].getId()) {
+                // Короткая вибрация при нажатии на кнопку ответа
+                VibrationUtils.vibrateShort(requireContext());
+                
                 // Проверяем правильность ответа
                 boolean isCorrect = gameManager.checkAnswer(optionButtons[i].getText().toString());
                 
@@ -785,8 +792,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // Устанавливаем текст обратной связи
         if (isCorrect) {
             tvFeedback.setText("✅ Правильно!");
+            // Вибрация при правильном ответе (средней длительности)
+            VibrationUtils.vibrateMedium(requireContext());
         } else {
             tvFeedback.setText("❌ Неправильно!");
+            // Вибрация при неправильном ответе (длинная)
+            VibrationUtils.vibrateLong(requireContext());
         }
         
         // Делаем текст видимым и применяем анимацию 
@@ -902,6 +913,43 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             if (savedCategory >= 0 && savedCategory < MemeData.CategoryType.values().length) {
                 currentCategory = MemeData.CategoryType.values()[savedCategory];
             }
+            
+            // ИСПРАВЛЕНИЕ: Отображаем текущий мем и кнопки с вариантами ответа
+            // чтобы избежать белого/черного экрана при возвращении в игру
+            try {
+                // Отображаем текущий мем и обновляем UI
+                displayCurrentMeme();
+                
+                // Сбрасываем состояние кнопок (делаем их доступными)
+                for (Button btn : optionButtons) {
+                    btn.setEnabled(true);
+                }
+                
+                // Обновляем статистику игрока
+                updatePlayerStats();
+                
+                // Скрываем сообщение обратной связи
+                if (tvFeedback != null) {
+                    tvFeedback.setVisibility(View.INVISIBLE);
+                }
+            } catch (Exception e) {
+                Log.e("HomeFragment", "Ошибка при восстановлении игры: " + e.getMessage(), e);
+                // В случае ошибки сбрасываем состояние игры и возвращаемся на стартовый экран
+                resetGameState();
+                gameContainer.setVisibility(View.GONE);
+                startGameContainer.setVisibility(View.VISIBLE);
+                
+                // Показываем элементы заголовка на начальном экране
+                if (tvWelcome != null) tvWelcome.setVisibility(View.VISIBLE);
+                if (tvCurrentRank != null) tvCurrentRank.setVisibility(View.VISIBLE);
+                if (ivCurrentRank != null) ivCurrentRank.setVisibility(View.VISIBLE);
+                if (ivRankBadge != null) ivRankBadge.setVisibility(View.VISIBLE);
+                if (btnPlay != null) btnPlay.setVisibility(View.VISIBLE);
+                if (btnLeaderboard != null) btnLeaderboard.setVisibility(View.VISIBLE);
+                if (btnProfile != null) btnProfile.setVisibility(View.VISIBLE);
+                
+                Toast.makeText(requireContext(), "Не удалось восстановить игру, начните заново", Toast.LENGTH_SHORT).show();
+            }
         } else {
             // Если нет, показываем экран выбора сложности
             gameContainer.setVisibility(View.GONE);
@@ -990,16 +1038,37 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
      */
     private void setupClickListeners(View rootView) {
         btnPlay.setOnClickListener(v -> {
+            // Сохраняем текущее состояние игры перед переходом
+            if (isGameStarted && gameManager != null) {
+                savedGameManager = gameManager;
+                savedDifficulty = currentDifficulty.ordinal();
+                savedCategory = currentCategory.ordinal();
+            }
+            
             NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
             navController.navigate(R.id.action_homeFragment_to_gameModeFragment);
         });
         
         btnLeaderboard.setOnClickListener(v -> {
+            // Сохраняем текущее состояние игры перед переходом
+            if (isGameStarted && gameManager != null) {
+                savedGameManager = gameManager;
+                savedDifficulty = currentDifficulty.ordinal();
+                savedCategory = currentCategory.ordinal();
+            }
+            
             NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
             navController.navigate(R.id.action_homeFragment_to_leaderboardFragment);
         });
         
         btnProfile.setOnClickListener(v -> {
+            // Сохраняем текущее состояние игры перед переходом
+            if (isGameStarted && gameManager != null) {
+                savedGameManager = gameManager;
+                savedDifficulty = currentDifficulty.ordinal();
+                savedCategory = currentCategory.ordinal();
+            }
+            
             NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
             navController.navigate(R.id.action_homeFragment_to_profileFragment);
         });

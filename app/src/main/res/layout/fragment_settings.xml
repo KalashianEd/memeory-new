@@ -45,48 +45,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Звуки -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:background="@drawable/settings_item_background"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@android:drawable/ic_lock_silent_mode_off"
-                    android:tint="#FFFFFF"
-                    android:contentDescription="@string/settings_sound_enabled" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/settings_sound_enabled"
-                    android:textSize="18sp"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginStart="16dp" />
-
-                <Switch
-                    android:id="@+id/switchSound"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:thumbTint="#3498DB"
-                    android:trackTint="#88FFFFFF"
-                    style="@style/CustomSwitchStyle" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#22FFFFFF"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
-
             <!-- Вибрация -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -114,48 +72,6 @@
 
                 <Switch
                     android:id="@+id/switchVibration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:thumbTint="#3498DB"
-                    android:trackTint="#88FFFFFF"
-                    style="@style/CustomSwitchStyle" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#22FFFFFF"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
-
-            <!-- Ночной режим -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:background="@drawable/settings_item_background"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@android:drawable/ic_menu_day"
-                    android:tint="#FFFFFF"
-                    android:contentDescription="@string/settings_night_mode" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/settings_night_mode"
-                    android:textSize="18sp"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginStart="16dp" />
-
-                <Switch
-                    android:id="@+id/switchNightMode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:thumbTint="#3498DB"

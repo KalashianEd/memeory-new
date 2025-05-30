@@ -24,13 +24,9 @@ import com.kalashianed.memeory.game.GameManager;
 public class SettingsFragment extends Fragment {
 
     private static final String PREFS_FILE = "memeory_prefs";
-    private static final String PREF_SOUND = "sound_enabled";
     private static final String PREF_VIBRATION = "vibration_enabled";
-    private static final String PREF_NIGHT_MODE = "night_mode";
 
-    private Switch switchSound;
     private Switch switchVibration;
-    private Switch switchNightMode;
     private Button btnResetProgress;
     private SharedPreferences preferences;
 
@@ -52,9 +48,7 @@ public class SettingsFragment extends Fragment {
 
         // Инициализация представлений
         TextView tvTitle = root.findViewById(R.id.tvSettingsTitle);
-        switchSound = root.findViewById(R.id.switchSound);
         switchVibration = root.findViewById(R.id.switchVibration);
-        switchNightMode = root.findViewById(R.id.switchNightMode);
         btnResetProgress = root.findViewById(R.id.btnResetProgress);
 
         // Применение стиля к переключателям
@@ -77,37 +71,18 @@ public class SettingsFragment extends Fragment {
      */
     private void applyCustomSwitchStyle() {
         // Для дополнительной стилизации программно
-        switchSound.setThumbTextPadding(8);
         switchVibration.setThumbTextPadding(8);
-        switchNightMode.setThumbTextPadding(8);
     }
 
     /**
      * Устанавливает обработчики событий для переключателей
      */
     private void setupSwitchListeners() {
-        switchSound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                saveSetting(PREF_SOUND, isChecked);
-                showFeedback(isChecked ? R.string.sound_enabled : R.string.sound_disabled);
-            }
-        });
-
         switchVibration.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 saveSetting(PREF_VIBRATION, isChecked);
                 showFeedback(isChecked ? R.string.vibration_enabled : R.string.vibration_disabled);
-            }
-        });
-
-        switchNightMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                saveSetting(PREF_NIGHT_MODE, isChecked);
-                showFeedback(isChecked ? R.string.night_mode_enabled : R.string.night_mode_disabled);
-                // Здесь можно добавить код для переключения темы приложения
             }
         });
     }
@@ -165,9 +140,7 @@ public class SettingsFragment extends Fragment {
      * Загружает сохраненные настройки
      */
     private void loadSettings() {
-        switchSound.setChecked(preferences.getBoolean(PREF_SOUND, true));
         switchVibration.setChecked(preferences.getBoolean(PREF_VIBRATION, true));
-        switchNightMode.setChecked(preferences.getBoolean(PREF_NIGHT_MODE, false));
     }
 
     /**
